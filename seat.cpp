@@ -61,7 +61,7 @@ void seat::deleteStu(string num,student *seats)             //输入某人的考号，取
     {
         if(num==seats[i].getNum())
         {
-            seats[i].setNum(0);
+            seats[i].setNum("0");
             cout<<"学生"<<seats[i].getName()<<"("<<num<<")"<<"座位已成功被取消哟"<<endl;
             return ;
         }
