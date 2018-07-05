@@ -31,6 +31,7 @@ SqStack InitStack(SqStack S){//创建栈
     return S;
 }//InitStack
 
+int savemaze(int **maze,int line,int row);
 //若栈不空，则删除S的栈顶元素，用e返回其值，并返回OK；否则返回ERROR
 int IsEmpty(SqStack S){
     if(S.top == S.base) //如果空栈，报错
@@ -76,10 +77,51 @@ SElemType GetTop(SqStack S){//返回栈顶元素
 }//GetTop
 
 //创建迷宫，随机设置障碍物
-void Create_Maze(int **maze, int line, int row){
+int **Create_Maze(int *LSize, int *RSize,char havemaze){
     int Fi,Fj;//用于随机产生有障碍的位置
     int i,j;
-
+    int line,row;
+    int **maze;
+    if(havemaze=='3'){
+        FILE *fp=fopen("mazes","r");
+        if(fp==NULL){printf("未保存有迷宫");} return maze;
+        fscanf(fp,"%d",&line);
+        fscanf(fp,"%d",&row);
+        *LSize = line;
+	*RSize = row;
+        printf("%d %d",line,row);
+        do{
+            maze = (int**)malloc(sizeof(int) * row);
+        }while(maze == NULL);
+        printf("%d %d",line,row);
+        for(i = 0; i < line;i++){
+            do{
+                *(maze + i) = (int*)malloc(sizeof(int) * row);
+            }while(maze + i == NULL);
+            
+        }
+        for(int i=0;i<line;i++){
+            for(int j=0;j<row;j++)
+                fscanf(fp,"%d",&maze[line][row]);
+        }
+        fclose(fp);
+        printf("%d %d",line,row);
+        return maze;
+    }
+    //自定义迷宫大小
+    printf("Please input the MazeSize\"(LSize RSize)\":");
+    scanf("%d %d",&line, &row);
+    *LSize = line;
+    *RSize = row;
+    //动态分配二维数组内存
+    do{//确保开辟成功
+        maze = (int**)malloc(sizeof(int*) * line);
+    }while(maze == NULL);
+    for(i = 0; i < line; i++)
+        do{
+            *(maze + i) = (int*)malloc(sizeof(int) * row);
+        }while(maze + i == NULL);
+ 
     for(i = 0; i < line; i++)
        for(j = 0; j < row; j++)
             if(i == 0 || j == 0 || i == line - 1 || j == row - 1)//围墙
@@ -94,6 +136,7 @@ void Create_Maze(int **maze, int line, int row){
         Fj=rand()%row;
         maze[Fi][Fj] = 0;
     }//for
+    return maze;
 }//Create_Maze
 
 void Print_Maze(int **maze, int line, int row){//打印迷宫
@@ -103,9 +146,11 @@ void Print_Maze(int **maze, int line, int row){//打印迷宫
     //列坐标提示
     printf("  ");
     for(i = 0; i < row; i++)
+    {
         printf("%-2d",i);
+    }
+    printf("%d %d",line,row);
     printf("\n");
-
     for(i = 0; i < line; i++){
         printf("%-2d",i);//行坐标提示
         for(j = 0; j < row; j++){
@@ -119,8 +164,30 @@ void Print_Maze(int **maze, int line, int row){//打印迷宫
             }//switch
         }//for
         printf("\n");
-    }//for
+    }//foor
+    printf("是否需要保存到文件？Y/n");
+    char choice;
+    scanf("%s",&choice);
+    if(choice=='Y'||choice=='y'){
+        savemaze(maze,line,row);
+    }
 }//Print_Maze
+
+int savemaze(int **maze,int line,int row){
+    FILE *fp = fopen("mazes","w");
+    if(!fp){printf("bad!");return 0;}
+    fprintf(fp,"%d %d ",line, row);
+    for(int i=0;i<line;i++){
+        for(int j=0;j<row;j++){
+            fprintf(fp,"%d",maze[i][j]);
+            fprintf(fp,"%s"," ");
+        }
+    }
+    fprintf(fp,"%s","\n");
+    fclose(fp);
+    return 0; 
+}
+
 
 PosType NextPos(PosType pos, int di){//下一个要走的位置
     switch(di){
@@ -208,20 +275,18 @@ int main(){
     int LSize, RSize;//迷宫大小，可以自定义行和列
     SqStack S;
 
-    //自定义迷宫大小
-    printf("Please input the MazeSize\"(LSize RSize)\":");
-    scanf("%d %d",&LSize, &RSize);
-    //动态分配二维数组内存
-    do{//确保开辟成功
-        maze = (int**)malloc(sizeof(int*) * LSize);
-    }while(maze == NULL);
-    for(i = 0; i < LSize; i++)
-        do{
-            *(maze + i) = (int*)malloc(sizeof(int) * RSize);
-        }while(maze + i == NULL);
-
+    printf("1.生成递归寻路迷宫");
+    printf("2.生成非递归寻路迷宫");
+    printf("3.读取保存的迷宫");
+    char menuchoice;
+    printf("ddd");
+    menuchoice = getchar();
+    printf("ddd");
+     
     //创建并打印迷宫
-    Create_Maze(maze, LSize, RSize);
+    maze = Create_Maze(&LSize, &RSize,menuchoice);
+    printf("%d %d",LSize,RSize);
+    printf("%d",maze[0][0]);
     Print_Maze(maze, LSize, RSize);
 
     printf("\n");
