@@ -84,28 +84,25 @@ int **Create_Maze(int *LSize, int *RSize,char havemaze){
     int **maze;
     if(havemaze=='3'){
         FILE *fp=fopen("mazes","r");
-        if(fp==NULL){printf("未保存有迷宫");} return maze;
-        fscanf(fp,"%d",&line);
+        //if(fp==NULL){printf("未保存有迷宫");} return 0;
+	fscanf(fp,"%d",&line);
         fscanf(fp,"%d",&row);
         *LSize = line;
 	*RSize = row;
-        printf("%d %d",line,row);
-        do{
-            maze = (int**)malloc(sizeof(int) * row);
+    	do{
+            maze = (int**)malloc(sizeof(int*) * line);
         }while(maze == NULL);
-        printf("%d %d",line,row);
-        for(i = 0; i < line;i++){
+        for(i = 0; i < line;i++)
             do{
                 *(maze + i) = (int*)malloc(sizeof(int) * row);
             }while(maze + i == NULL);
             
-        }
-        for(int i=0;i<line;i++){
-            for(int j=0;j<row;j++)
-                fscanf(fp,"%d",&maze[line][row]);
+       for(int l=0;l<line;l++){
+            for(int r=0;r<row;r++){
+		fscanf(fp,"%d",&maze[l][r]);
+            }
         }
         fclose(fp);
-        printf("%d %d",line,row);
         return maze;
     }
     //自定义迷宫大小
@@ -139,17 +136,15 @@ int **Create_Maze(int *LSize, int *RSize,char havemaze){
     return maze;
 }//Create_Maze
 
-void Print_Maze(int **maze, int line, int row){//打印迷宫
+void Print_Maze(int **maze, int line, int row,char menuchoice){//打印迷宫
     //为了美观，行方向一个格子占两个字符
     int i,j;
-
     //列坐标提示
     printf("  ");
     for(i = 0; i < row; i++)
     {
         printf("%-2d",i);
     }
-    printf("%d %d",line,row);
     printf("\n");
     for(i = 0; i < line; i++){
         printf("%-2d",i);//行坐标提示
@@ -165,11 +160,13 @@ void Print_Maze(int **maze, int line, int row){//打印迷宫
         }//for
         printf("\n");
     }//foor
-    printf("是否需要保存到文件？Y/n");
-    char choice;
-    scanf("%s",&choice);
-    if(choice=='Y'||choice=='y'){
-        savemaze(maze,line,row);
+    if(menuchoice != '3'){
+        printf("是否需要保存到文件？Y/n");
+        char choice;
+        scanf("%s",&choice);
+        if(choice=='Y'||choice=='y'){
+            savemaze(maze,line,row);
+        }
     }
 }//Print_Maze
 
@@ -279,15 +276,11 @@ int main(){
     printf("2.生成非递归寻路迷宫");
     printf("3.读取保存的迷宫");
     char menuchoice;
-    printf("ddd");
     menuchoice = getchar();
-    printf("ddd");
      
     //创建并打印迷宫
     maze = Create_Maze(&LSize, &RSize,menuchoice);
-    printf("%d %d",LSize,RSize);
-    printf("%d",maze[0][0]);
-    Print_Maze(maze, LSize, RSize);
+    Print_Maze(maze, LSize, RSize,menuchoice);
 
     printf("\n");
 
@@ -317,7 +310,7 @@ int main(){
     maze[Start.i][Start.j] = 4;
     maze[End.i][End.j] = 5;
     printf("'*' is obstacle, '+' is the pass road.\n");
-    Print_Maze(maze, LSize, RSize);
+    Print_Maze(maze, LSize, RSize,'3');
 
     free(maze);//释放动态二维数组
 
