@@ -236,12 +236,57 @@ void print(char word[100]){
 		}
 	}
 }
+void choicerule()
+{
+	char rule1[20];
+	char rule2[20];
+	int choicerule;
+	FILE *fp = fopen("rules","r");
+	if(!fp){printf("当前未保存规则!");return;}
+	int rulenum=0;
+	while(!feof(fp)){
+		fscanf(fp,"%s",rule1);
+		fscanf(fp,"%s",rule2);
+		rulenum++;
+		printf("##%d 规则 %s %s\n",rulenum,rule1,rule2);
+	
+	}
+	fclose(fp);
+	fp = fopen("rules","r");
+	printf("载入你想使用的规则序号(不输入为默认规则)");
+	scanf("%d",&choicerule);
+	while(choicerule>=rulenum&&choicerule<1)
+	{
+		printf("请不要选择错误的序号！请重新输入");
+		scanf("%d",&choicerule);
+	}
+	for(int i=0;i<choicerule;i++){
+		fscanf(fp,"%s",rule1);
+		fscanf(fp,"%s",rule2);
+	}
+	fclose(fp);
+	printf("你选择了规则 | %s %s",rule1,rule2);
+
+}
+
 
 status main(){
 	sqstack stack1;
 	linkqueue queue1;
 	int k=0;
 	int flag=1;
+	int menuchoice;
+	printf("1.选择解释规则");
+	printf("2.自定义解释规则");
+	printf("3.读取存储的魔王语言");
+	scanf("%d",&menuchoice);
+	switch(menuchoice){
+		case 1:
+			choicerule();
+			break;
+		default:
+			break;
+	}
 	printf("\n\n\n\t\t\t魔王语言！\n");
 	 printf("\t***************************************\n");
 	 printf("\t输入魔王的语言：\n\t"); 
