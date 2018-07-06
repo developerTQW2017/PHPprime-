@@ -18,6 +18,14 @@ char demon[MAXSIZE];
 ///栈结构体
 typedef struct
 {
+	char bfa[20]="0";
+	char afa[20]="0";
+	char bfb[20]="0";
+	char afb[20]="0";
+}rules;
+
+typedef struct
+{
 	selemtype *base;
 	selemtype *top;
 	int stacksize;
@@ -236,19 +244,26 @@ void print(char word[100]){
 		}
 	}
 }
-void choicerule()
+rules choicerule()
 {
 	char rule1[20];
 	char rule2[20];
+	char rule3[20];
+	char rule4[20];
+	
+	rules rule;
+
 	int choicerule;
 	FILE *fp = fopen("rules","r");
-	if(!fp){printf("当前未保存规则!");return;}
+	if(!fp){printf("当前未保存规则!");return rule;}
 	int rulenum=0;
 	while(!feof(fp)){
 		fscanf(fp,"%s",rule1);
 		fscanf(fp,"%s",rule2);
+		fscanf(fp,"%s",rule3);
+		fscanf(fp,"%s",rule4);
 		rulenum++;
-		printf("##%d 规则 %s %s\n",rulenum,rule1,rule2);
+		printf("##%d 规则 %s->%s %s->%s\n",rulenum,rule1,rule2,rule3,rule4);
 	
 	}
 	fclose(fp);
@@ -263,10 +278,16 @@ void choicerule()
 	for(int i=0;i<choicerule;i++){
 		fscanf(fp,"%s",rule1);
 		fscanf(fp,"%s",rule2);
+		fscanf(fp,"%s",rule3);
+		fscanf(fp,"%s",rule4);
 	}
 	fclose(fp);
-	printf("你选择了规则 | %s %s",rule1,rule2);
-
+	printf("你选择了规则 | %s->%s %s->%s",rule1,rule2,rule3,rule4);
+	strcpy(rule.bfa,rule1);
+	strcpy(rule.afa,rule2);
+	strcpy(rule.bfb,rule3);
+	strcpy(rule.afb,rule4);
+	return rule;
 }
 
 
@@ -282,9 +303,8 @@ status main(){
 	scanf("%d",&menuchoice);
 	switch(menuchoice){
 		case 1:
-			choicerule();
-			break;
-		default:
+			rules rule;
+			rule = choicerule();
 			break;
 	}
 	printf("\n\n\n\t\t\t魔王语言！\n");
