@@ -306,6 +306,11 @@ status main(){
 		case 1:
 			rule = choicerule();
 			break;
+		case 2:
+			printf("请输入规则!");
+			printf("格式如下x xxxx");
+			scanf("%s %s %s %s",rule.bfa,rule.afa,rule.bfb,rule.afb);
+			break;
 	}
 	printf("你选择了规则 | %s->%s %s->%s",rule.bfa,rule.afa,rule.bfb,rule.afb);
 	printf("\n\n\n\t\t\t魔王语言！\n");
