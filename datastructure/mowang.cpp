@@ -140,16 +140,16 @@ typedef struct
 }
 	 
 	 //特殊入队函数
-	 void spenqueue(linkqueue *queue, char key)
+	 void spenqueue(linkqueue *queue, char key,rules rule)
 	 {
 	 	int j = 0;
-	 	char a[5];
-	 	switch(key)
-	 	{
-	 		case 'A':strcpy(a,"sae"); break;
-	 		case 'B':strcpy(a,"tAdA"); break;
-			default:strcpy(a,"???"); 
-		 }
+	 	char a[20];
+	 	if(key==rule.bfa[0])
+		{strcpy(a,rule.afa);
+		}else if(key==rule.bfb[0])
+		{
+		strcpy(a,rule.afb);
+		}
 		 while(a[j]!='\0')
 		 {
 		 	qPush(queue,a[j]);
@@ -157,7 +157,7 @@ typedef struct
 		 }
 	  } 
 	  
-	  status sort(sqstack *stack, linkqueue *queue)
+	  status sort(sqstack *stack, linkqueue *queue,rules rule)
 	  {
 	  	qNode b;
 	  	int flag=0; //判断大写字母
@@ -170,7 +170,7 @@ typedef struct
 			{
 				if('A'<=b.data && b.data<='Z')
 				{
-					spenqueue(queue,b.data);
+					spenqueue(queue,b.data,rule);
 					flag=1;
 				}
 				else{
@@ -301,12 +301,13 @@ status main(){
 	printf("2.自定义解释规则");
 	printf("3.读取存储的魔王语言");
 	scanf("%d",&menuchoice);
+	rules rule;
 	switch(menuchoice){
 		case 1:
-			rules rule;
 			rule = choicerule();
 			break;
 	}
+	printf("你选择了规则 | %s->%s %s->%s",rule.bfa,rule.afa,rule.bfb,rule.afb);
 	printf("\n\n\n\t\t\t魔王语言！\n");
 	 printf("\t***************************************\n");
 	 printf("\t输入魔王的语言：\n\t"); 
@@ -314,6 +315,8 @@ status main(){
 	printf("例子：B(ehnxgz)B\n") ;
     printf("\t***************************************\n\t");
     scanf("%s",demon); 
+	char tep[100];
+	strcpy(tep,demon);
     printf("\n\t***************************************"); 
     initStack(&stack1);
     initQueue(&queue1);
@@ -321,7 +324,7 @@ status main(){
     while(flag==1)
     {
     	k=0;
-    	flag=sort(&stack1,&queue1);
+    	flag=sort(&stack1,&queue1,rule);
     	 while(queue1.front!=queue1.rear) /*重写demon[i ]*/ 
             { 
             qPop(&queue1,&e); 
@@ -335,8 +338,10 @@ status main(){
     printf("\n\n\t***************************************\n");
     //if(!strcmp(demon,"tsaedsaeezegexenehetsaedsae")){ printf("\t只鹅地上一只鹅鹅追鹅赶鹅下鹅蛋鹅恨鹅天上一只鹅地上一只鹅\n");} 
     print(demon);
-
-    printf("\n\t\t\t欢迎使用!\n\t");
+	FILE *fp = fopen("trans","w");
+    	fprintf(fp,"%s %s\n",tep,demon);
+	fclose(fp);
+	printf("\n\t\t\t欢迎使用!\n\t");
     printf("回车键退出！");
 if(getchar()) exit(1);
 	}
