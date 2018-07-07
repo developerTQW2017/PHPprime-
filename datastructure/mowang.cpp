@@ -297,9 +297,10 @@ status main(){
 	int k=0;
 	int flag=1;
 	int menuchoice;
+	while(1){
 	printf("1.选择解释规则");
 	printf("2.自定义解释规则");
-	printf("3.读取存储的魔王语言");
+	printf("4.退出");
 	scanf("%d",&menuchoice);
 	rules rule;
 	switch(menuchoice){
@@ -311,6 +312,9 @@ status main(){
 			printf("格式如下x xxxx");
 			scanf("%s %s %s %s",rule.bfa,rule.afa,rule.bfb,rule.afb);
 			break;
+		case 4:
+			printf("推出");
+			return 0;
 	}
 	printf("你选择了规则 | %s->%s %s->%s",rule.bfa,rule.afa,rule.bfb,rule.afb);
 	printf("\n\n\n\t\t\t魔王语言！\n");
@@ -343,10 +347,12 @@ status main(){
     printf("\n\n\t***************************************\n");
     //if(!strcmp(demon,"tsaedsaeezegexenehetsaedsae")){ printf("\t只鹅地上一只鹅鹅追鹅赶鹅下鹅蛋鹅恨鹅天上一只鹅地上一只鹅\n");} 
     print(demon);
-	FILE *fp = fopen("trans","w");
-    	fprintf(fp,"%s %s\n",tep,demon);
+	FILE *fp = fopen("trans","a");
+    	fprintf(fp,"魔王语言:%s 翻译后%s\n",tep,demon);
+	printf("翻译结果已保存");
 	fclose(fp);
 	printf("\n\t\t\t欢迎使用!\n\t");
+}
     printf("回车键退出！");
 if(getchar()) exit(1);
 	}
