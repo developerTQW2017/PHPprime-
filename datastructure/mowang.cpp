@@ -193,48 +193,59 @@ typedef struct
 
 void print(char word[100]){
 	int i=0;
+	FILE *ch = fopen("trans","a");
 	while(word[i] != NULL )
 	{
 		switch(word[i])
 		{
 			case 't':
+				fprintf(ch,"天");
 				printf("天");
 				i++;
 				break;
 			case 'd':
 				printf("地");
+				fprintf(ch,"地");
 				i++;
 				break;
 			case 's':
 				printf("上");
+				fprintf(ch,"上");
 				i++;
 				break;
 			case 'a':
 				printf("一只");
+				fprintf(ch,"一只");
 				i++;
 				break;
 			case 'e':
 				printf("鹅");
+				fprintf(ch,"鹅");
 				i++;
 				break;
 			case 'z':
 				printf("追");
+				fprintf(ch,"追");
 				i++;
 				break;
 			case 'g':
 				printf("赶");
+				fprintf(ch,"赶");
 				i++;
 				break;
 			case 'x':
 				printf("下");
+				fprintf(ch,"下");
 				i++;
 				break;
 			case 'n':
 				printf("蛋");
+				fprintf(ch,"蛋");
 				i++;
 				break;
 			case 'h':
 				printf("恨");
+				fprintf(ch,"恨");
 				i++;
 				break;
 			default :
@@ -243,6 +254,8 @@ void print(char word[100]){
 				break; 
 		}
 	}
+	fprintf(ch,"\n");
+	fclose(ch);
 }
 rules choicerule()
 {
