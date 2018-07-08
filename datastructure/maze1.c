@@ -270,14 +270,16 @@ int main(){
     int Si,Sj,Ei,Ej,i;//分别是起点终点坐标，和计数器
     int **maze;//迷宫二维数组
     int LSize, RSize;//迷宫大小，可以自定义行和列
-    SqStack S;
+    while(1){
+	SqStack S;
 
     printf("1.生成递归寻路迷宫");
     printf("2.生成非递归寻路迷宫");
     printf("3.读取保存的迷宫");
+	printf("4.退出");
     char menuchoice;
     menuchoice = getchar();
-     
+     if(menuchoice=='4'){return 0;}
     //创建并打印迷宫
     maze = Create_Maze(&LSize, &RSize,menuchoice);
     Print_Maze(maze, LSize, RSize,menuchoice);
@@ -313,6 +315,6 @@ int main(){
     Print_Maze(maze, LSize, RSize,'3');
 
     free(maze);//释放动态二维数组
-
+}
     return 0;
 }//main
